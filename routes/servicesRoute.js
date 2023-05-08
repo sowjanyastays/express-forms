@@ -3,18 +3,6 @@ const app = express();
 const data = require('./serviceList.js')
 const router = express.Router();
 
-router.get('/:id',(req,res)=>{
-    var id = Number(req.params.id);
-    const result = data.find((ser)=>{
-        return ser.id === id;
-    })
-    if(!result){
-        res.status(500).send("Error finding service");
-    }
-    else{
-        res.status(200).send(result.name);
-    }
-})
 
 router.get('/',(req,res)=>{
     res.status(200).json({
@@ -23,15 +11,18 @@ router.get('/',(req,res)=>{
 })
 
 router.get('/:id',(req,res)=>{
-    var id = Number(req.params.id);
-    const result = data.find(ser => ser.id === id)
-    if(!result){
+    const regex = /^[1-9]$/;
+    const isValid = regex.test(req.params.id);
+    if(isValid)
+    res.send(req.service.name);
+    else{
         res.status(500).send("Error finding service");
     }
-    else{
-        res.status(200).send(result.id.name);
-    }
-})
+ })
 
+router.param('id',(req,res,next,id)=>{
+    req.service = data[id];
+    next();
+})
 
 module.exports = router;
