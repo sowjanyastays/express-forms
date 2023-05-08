@@ -5,19 +5,27 @@ const router = express.Router();
 
 
 router.get('/',(req,res)=>{
-    res.status(200).json({
-        "message":"This is services page"
-    });
+    res.send(data);
+
+})
+
+
+router.get('/newroute',(req,res)=>{
+    res.render('index')
+    
+})
+
+router.post('/',(req,res)=>{
+    const serviceToAdd = req.body.serviceName;
+    const serviceCost = req.body.serviceCost;
+    const serviceTime = req.body.serviceTime;
+    console.log(serviceToAdd);
+    data.push({name:serviceToAdd, cost:serviceCost, time:serviceTime});
+    res.redirect(`/services/${data.length-1}`)
 })
 
 router.get('/:id',(req,res)=>{
-    const regex = /^[1-9]$/;
-    const isValid = regex.test(req.params.id);
-    if(isValid)
-    res.send(req.service.name);
-    else{
-        res.status(500).send("Error finding service");
-    }
+    res.send(req.service);
  })
 
 router.param('id',(req,res,next,id)=>{
